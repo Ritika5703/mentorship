@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const profileRoutes = require("./routes/profile");
+const errorMiddleware = require("./error/error.js");
 
 const app = express();
 
@@ -16,7 +17,9 @@ app.use(
 app.use(express.json());
 
 // Routes
-app.use("/api", profileRoutes);
+app.use("/api/", profileRoutes);
+app.use("/auth", require("./routes/userRoutes"));
+app.use(errorMiddleware);
 
 // Test route
 app.get("/api/test", (req, res) => {
