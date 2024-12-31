@@ -18,6 +18,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/", profileRoutes);
+app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/auth", require("./routes/userRoutes"));
 app.use(errorMiddleware);
 
