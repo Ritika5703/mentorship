@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const MentorCard = ({ id, name, role, rating, price }) => {
+  console.log(id);
+  
   const navigate = useNavigate();
 
   const handleViewProfile = () => {
