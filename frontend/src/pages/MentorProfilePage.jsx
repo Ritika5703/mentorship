@@ -44,7 +44,7 @@ const MentorProfilePage = () => {
               <h1 className="text-2xl font-bold">{mentor.name}</h1>
               <p className="text-gray-600">{mentor.expertise}</p>
               <p className="text-sm text-gray-500">
-                {mentor.rating} ⭐ ({mentor.reviews.length} reviews)
+                {mentor.rating} ⭐
               </p>
               <div className="mt-4 space-x-4">
                 <button className="px-4 py-2 bg-teal-600 text-white rounded-lg">
@@ -62,7 +62,7 @@ const MentorProfilePage = () => {
               </div>
             </div>
             {/* Services and Availability */}
-            <div className="bg-gray-100 p-6 rounded-lg w-64">
+            {/* <div className="bg-gray-100 p-6 rounded-lg w-64">
               <h2 className="text-lg font-semibold mb-4">Services</h2>
               <ul className="text-sm text-gray-600 mb-4">
                 {mentor.services.map((service, index) => (
@@ -72,11 +72,11 @@ const MentorProfilePage = () => {
               <h2 className="text-lg font-semibold mb-4">Availability</h2>
               <p className="text-sm text-gray-600">{mentor.location}</p>
               <p className="text-sm text-gray-600">{mentor.price}€/hour</p>
-            </div>
+            </div> */}
           </div>
 
           {/* About Section */}
-          <div className="bg-white p-6 rounded-lg">
+          {/* <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">About</h2>
             <p className="text-sm text-gray-600">{mentor.description}</p>
             <div className="mt-4">
@@ -92,9 +92,9 @@ const MentorProfilePage = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
 
-          {/* Reviews Section */}
+          {/* Reviews Section
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Reviews</h2>
             {mentor.reviews.map((review, index) => (
@@ -108,9 +108,9 @@ const MentorProfilePage = () => {
               </div>
             ))}
             <button className="text-teal-600 text-sm">See more reviews</button>
-          </div>
+          </div> */}
 
-          {/* Blogs Section */}
+          {/* Blogs Section
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">
               Blogs of {mentor.name}
@@ -129,10 +129,10 @@ const MentorProfilePage = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Similar Mentors Section */}
-          <div className="bg-white p-6 rounded-lg">
+          {/* <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Similar Mentors</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {mentor.similarMentors.map((similarMentor, index) => (
@@ -151,7 +151,7 @@ const MentorProfilePage = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
       <Footer />
