@@ -29,12 +29,6 @@ const Navbar = () => {
             Become a mentor
           </Link>
           <Link
-            to="/blogs"
-            className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
-          >
-            Blogs
-          </Link>
-          <Link
             to="/contact-us"
             className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
           >

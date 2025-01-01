@@ -54,9 +54,6 @@ const Footer = () => {
             <Link to="/become-a-mentor" className="hover:underline">
               Become a mentor
             </Link>
-            <Link to="/blogs" className="hover:underline">
-              Blogs
-            </Link>
             <Link to="/contact-us" className="hover:underline">
               Contact us
             </Link>

@@ -20,6 +20,7 @@ app.use(express.json());
 app.use("/api/", profileRoutes);
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/auth", require("./routes/userRoutes"));
+app.use("/api/mentor", require("./routes/mentorRoutes.js"));
 app.use(errorMiddleware);
 
 // Test route

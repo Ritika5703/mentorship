@@ -11,7 +11,17 @@ const transporter = nodemailer.createTransport({
 
 exports.submitContact = async (req, res) => {
   try {
+    console.log("Received contact form data:", req.body);
+
     const { name, email, message } = req.body;
+
+    // Validate input
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
 
     // Save to database
     const contact = await Contact.create({
@@ -19,29 +29,19 @@ exports.submitContact = async (req, res) => {
       email,
       message,
     });
-
-    // Send email notification
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.ADMIN_EMAIL,
-      subject: "New Contact Form Submission",
-      html: `
-        <h2>New Contact Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `,
-    });
+    console.log("Successfully saved to database:", contact);
 
     res.status(201).json({
       success: true,
       message: "Message sent successfully",
+      data: contact,
     });
   } catch (error) {
     console.error("Contact submission error:", error);
     res.status(500).json({
       success: false,
       message: "Error sending message",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };

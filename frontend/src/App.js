@@ -9,7 +9,6 @@ import AllMentorsPage from "./pages/AllMentorsPage";
 import MentorProfilePage from "./pages/MentorProfilePage";
 import BookMeetingPage from "./pages/BookMeetingPage";
 import BecomeTutorPage from "./pages/BecomeTutorPage";
-import BlogsPage from "./pages/BlogsPage";
 import MenteeProfilePage from "./pages/MenteeProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import Notifications from "./components/Notifications.jsx";
@@ -37,7 +36,6 @@ function App() {
         <Route path="/all-mentors" element={<AllMentorsPage />} />
         <Route path="/mentor/:id" element={<MentorProfilePage />} />
         <Route path="/book-meeting/:id" element={<BookMeetingPage />} />
-        <Route path="/blogs" element={<BlogsPage />} />
         <Route
           path="/mentee-profile"
           element={
