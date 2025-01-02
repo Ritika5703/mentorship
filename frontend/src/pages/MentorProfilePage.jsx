@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 const MentorProfilePage = () => {
   const { id } = useParams(); // Get the mentor id from the URL
@@ -27,7 +28,7 @@ const MentorProfilePage = () => {
     fetchMentorData();
   }, [id]); // Fetch data when the id changes
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>{error}</p>;
 
   return (
@@ -43,9 +44,7 @@ const MentorProfilePage = () => {
             <div className="flex-grow">
               <h1 className="text-2xl font-bold">{mentor.name}</h1>
               <p className="text-gray-600">{mentor.expertise}</p>
-              <p className="text-sm text-gray-500">
-                {mentor.rating} ⭐
-              </p>
+              <p className="text-sm text-gray-500">{mentor.rating} ⭐</p>
               <div className="mt-4 space-x-4">
                 <button className="px-4 py-2 bg-teal-600 text-white rounded-lg">
                   Contact Mentor

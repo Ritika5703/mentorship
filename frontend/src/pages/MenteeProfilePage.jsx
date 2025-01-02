@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 const MenteeProfilePage = () => {
   const navigate = useNavigate();
@@ -64,12 +65,7 @@ const MenteeProfilePage = () => {
     }
   };
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+  if (loading) return <Loader />;
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
