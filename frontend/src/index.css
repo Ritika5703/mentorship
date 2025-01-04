@@ -106,3 +106,7 @@ body {
   max-height: 400px; /* Set a height limit for the scroll */
   overflow-y: auto; /* Enable vertical scrolling */
 }
+
+*{
+  background-color: #282c34;
+}

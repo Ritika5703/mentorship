@@ -28,7 +28,7 @@ const becomeMentor = async (req, res) => {
     // Save the updated user document
     await user.save();
 
-    res.json({ message: "Mentor request submitted successfully!" });
+    res.json({ success: true, message: "Mentor request submitted successfully!" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal Server Error" });

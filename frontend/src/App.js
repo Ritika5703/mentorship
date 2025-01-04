@@ -15,6 +15,7 @@ import Notifications from "./components/Notifications.jsx";
 import Settings from "./components/Settings.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import React, { useEffect } from "react";
+import Logout from "./pages/Logout.jsx";
 
 function App() {
   useEffect(() => {
@@ -55,6 +56,7 @@ function App() {
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );

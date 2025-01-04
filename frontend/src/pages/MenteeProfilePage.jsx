@@ -67,21 +67,6 @@ const MenteeProfilePage = () => {
     }
   };
 
-  const handleBecomeMentor = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:4000/api/become-mentor",
-        { ...mentorDetails },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("You are now a mentor!");
-      setShowMentorModal(false);
-    } catch (err) {
-      console.error("Error becoming mentor:", err);
-      alert("Failed to become mentor. Please try again.");
-    }
-  };
 
   if (loading) return <Loader />;
   if (error)
@@ -104,7 +89,7 @@ const MenteeProfilePage = () => {
         <div className="container mx-auto py-12 px-6">
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200">
-              <h1 className="text-2xl font-bold">Mentee Profile</h1>
+              <h1 className="text-2xl font-bold">Profile</h1>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => navigate("/edit-profile")}
@@ -249,9 +234,9 @@ const MenteeProfilePage = () => {
       </div>
 
       <MentorRequestModal
+        user = {user}
         show={showMentorModal}
         onClose={() => setShowMentorModal(false)}
-        onSubmit={handleBecomeMentor}
       />
       <Footer />
     </div>
