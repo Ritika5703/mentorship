@@ -1,11 +1,10 @@
 const User = require("../models/User");
 
-exports.getMenteeProfile = async (req, res) => {
+exports.getProfile = async (req, res) => {
   try {
-    console.log("User ID from token:", req.user.id); // Debugging
 
     const user = await User.findById(req.user.id)
-      .select("-password")
+      .select("-password _id name email role meetings certificates mentorDetails bio about profilePicture rating reviews skills location")
       .populate("meetings.mentor", "name email");
 
     if (!user) {

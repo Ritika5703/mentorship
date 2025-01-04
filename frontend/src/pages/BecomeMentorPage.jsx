@@ -14,7 +14,6 @@ const BecomeMentorPage = () => {
 
   return (
     <div className="pt-20 bg-gradient-to-r from-teal-500 to-blue-600">
-      <Navbar />
       {/* Hero Section with Background Image */}
       <section
         className="relative bg-cover bg-center h-[40vh] md:h-[70vh] text-center py-20 text-white"

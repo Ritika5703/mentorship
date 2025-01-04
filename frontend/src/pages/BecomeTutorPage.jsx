@@ -39,7 +39,6 @@ const BecomeTutorPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-screen bg-gradient-to-r from-[#38B2AC] to-[#E6FFFA] flex items-center justify-center py-12 px-6 pt-20">
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-10 space-y-10 transform transition duration-300 ease-in-out hover:scale-105">
           {/* Heading */}

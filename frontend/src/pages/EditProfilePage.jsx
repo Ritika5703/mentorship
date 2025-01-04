@@ -76,7 +76,7 @@ const EditProfilePage = () => {
 
       if (response.ok) {
         alert("Profile updated successfully!");
-        navigate("/mentee-profile"); // Redirect to the profile page after success
+        navigate("/profile"); // Redirect to the profile page after success
       } else {
         throw new Error("Failed to update profile");
       }

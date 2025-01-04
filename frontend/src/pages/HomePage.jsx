@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 const HomePage = () => {
   return (
     <div className="pt-20">
-      <Navbar />
 
       {/* Hero Section */}
       <header

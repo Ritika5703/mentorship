@@ -33,7 +33,6 @@ const MentorProfilePage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       <main className="flex-grow bg-gray-50 py-12 pt-40">
         <div className="container mx-auto px-6 space-y-12">
           {/* Top Section */}

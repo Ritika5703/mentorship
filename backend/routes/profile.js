@@ -9,8 +9,6 @@ const {
   updateUserProfile,
 } = require("../controllers/profileController");
 
-router.get("/mentee-profile", auth, getMenteeProfile);
-router.put("/mentee-profile", auth, updateMenteeProfile);
 router.post("/meetings", auth, addMeeting);
 
 // Route to get user profile (protected)
