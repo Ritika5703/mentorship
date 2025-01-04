@@ -8,6 +8,17 @@ const meetingSchema = new mongoose.Schema({
   status: { type: String, default: "upcoming" },
 });
 
+const skillSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  level: { type: Number, min: 1, max: 5, default: 3 }, // Default level is 3
+});
+
+const mentorDetailsSchema = new mongoose.Schema({
+  fields: { type: [String], default: [] }, // Array of expertise fields
+  yearsOfExperience: { type: Number, default: 0 },
+  currentCompany: { type: String, default: "" },
+});
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -30,35 +41,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://via.placeholder.com/150",
     },
-    about: String,
-    skills: [
-      {
-        name: String,
-        level: { type: Number, min: 1, max: 5 },
-      },
-    ],
+    about: { type: String, default: "" }, // Added default value
+    skills: { type: [skillSchema], default: [] }, // Updated schema for skills
     role: {
       type: String,
       enum: ["mentee", "mentor"],
-      default: "mentee", // Default role is "mentee"
+      default: "mentee",
     },
-    mentorDetails: {
-      requested: { type: Boolean, default: false }, // If a mentor request is submitted
-      approved: { type: Boolean, default: false }, // Admin approval status
-      fields: [String], // Fields of expertise
-      yearsOfExperience: Number,
-      currentCompany: String,
-    },
-    meetings: [
-      meetingSchema,
-      // {
-      //   mentor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      //   theme: String,
-      //   date: Date,
-      //   status: { type: String, enum: ["upcoming", "completed", "cancelled"] },
-      //   reminder: { type: Number, default: 24 }, // hours before meeting
-      // },
-    ],
+    mentorDetails: { type: mentorDetailsSchema, default: () => ({}) },
+    meetings: { type: [meetingSchema], default: [] },
     certificates: [
       {
         name: String,
