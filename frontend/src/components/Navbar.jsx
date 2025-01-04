@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { use } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+
   return (
     <nav className="bg-white shadow-md rounded-b-lg fixed top-0 w-full z-50">
       <div className="container mx-auto flex justify-between items-center p-4">
@@ -38,6 +40,16 @@ const Navbar = () => {
 
         {/* Buttons */}
         <div className="flex space-x-4">
+        { localStorage.getItem("token") ? (
+          <Link
+            to="/logout"
+            className="text-red-600 border border-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition duration-300"
+          >
+            Logout
+          </Link>
+        ) : (
+          
+          <>
           <Link
             to="/login"
             className="text-teal-600 border border-teal-600 px-4 py-2 rounded-lg hover:bg-teal-100 transition duration-300"
@@ -50,6 +62,8 @@ const Navbar = () => {
           >
             Sign up
           </Link>
+        </>
+        )}
         </div>
       </div>
     </nav>

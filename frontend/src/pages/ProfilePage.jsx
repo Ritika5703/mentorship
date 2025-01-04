@@ -5,83 +5,47 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import Loader from "../components/Loader";
 import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
+import { useLocation } from "react-router-dom";
 
-const MenteeProfilePage = () => {
+
+const ProfilePage = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [user, setUser] = useState(state);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [showMentorModal, setShowMentorModal] = useState(false);
-  const [mentorDetails, setMentorDetails] = useState({
-    experience: "",
-    skills: "",
-    field: "",
-    company: "",
-    bio: "",
-    timeSlots: "",
-  });
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:4000/api/mentee-profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setUser(response.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const location = useLocation();
+  const { user } = location.state || {};
+  if (!user) {
+    navigate("/login");
+  }
 
-    fetchProfile();
-  }, []);
+  // const handleCancelMeeting = async (meetingId) => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     await axios.put(
+  //       `http://localhost:4000/api/meetings/${meetingId}/cancel`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
 
-  const handleCancelMeeting = async (meetingId) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:4000/api/meetings/${meetingId}/cancel`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  //     // Update local state to reflect the cancellation
+  //     setUser((prevUser) => ({
+  //       ...prevUser,
+  //       meetings: prevUser.meetings.map((meeting) =>
+  //         meeting._id === meetingId
+  //           ? { ...meeting, status: "cancelled" }
+  //           : meeting
+  //       ),
+  //     }));
+  //   } catch (err) {
+  //     console.error("Error canceling meeting:", err);
+  //     alert("Failed to cancel meeting");
+  //   }
+  // };
 
-      // Update local state to reflect the cancellation
-      setUser((prevUser) => ({
-        ...prevUser,
-        meetings: prevUser.meetings.map((meeting) =>
-          meeting._id === meetingId
-            ? { ...meeting, status: "cancelled" }
-            : meeting
-        ),
-      }));
-    } catch (err) {
-      console.error("Error canceling meeting:", err);
-      alert("Failed to cancel meeting");
-    }
-  };
-
-  const handleBecomeMentor = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:4000/api/become-mentor",
-        { ...mentorDetails },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("You are now a mentor!");
-      setShowMentorModal(false);
-    } catch (err) {
-      console.error("Error becoming mentor:", err);
-      alert("Failed to become mentor. Please try again.");
-    }
-  };
 
   if (loading) return <Loader />;
   if (error)
@@ -99,12 +63,11 @@ const MenteeProfilePage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="bg-gray-50 min-h-screen pt-20">
         <div className="container mx-auto py-12 px-6">
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200">
-              <h1 className="text-2xl font-bold">Mentee Profile</h1>
+              <h1 className="text-2xl font-bold">Profile</h1>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => navigate("/edit-profile")}
@@ -202,12 +165,12 @@ const MenteeProfilePage = () => {
                           <button className="bg-teal-500 text-white px-4 py-2 rounded-lg">
                             Join Meeting
                           </button>
-                          <button
+                          {/* <button
                             onClick={() => handleCancelMeeting(meeting._id)}
                             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           >
                             Cancel Meeting
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     ))}
@@ -249,13 +212,13 @@ const MenteeProfilePage = () => {
       </div>
 
       <MentorRequestModal
+        user = {user}
         show={showMentorModal}
         onClose={() => setShowMentorModal(false)}
-        onSubmit={handleBecomeMentor}
       />
       <Footer />
     </div>
   );
 };
 
-export default MenteeProfilePage;
+export default ProfilePage;

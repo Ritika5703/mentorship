@@ -48,7 +48,6 @@ const ContactUsPage = () => {
 
   return (
     <div className="bg-gradient-to-b from-[#E6FFFA] via-[#B2F5EA] to-[#38B2AC] min-h-screen pt-20">
-      <Navbar />
       <div className="container mx-auto py-12 px-4">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-start justify-between gap-12">
           {/* Contact Form */}

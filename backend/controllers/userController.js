@@ -70,10 +70,10 @@ exports.registerUser = async (req, res) => {
 
 // Login user
 exports.loginUser = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email, role });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found with this role" });
@@ -94,6 +94,7 @@ exports.loginUser = async (req, res) => {
     );
 
     res.status(200).json({
+      success: true,
       message: "Login successful",
       token,
       user: {
@@ -101,6 +102,14 @@ exports.loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profilePicture: user.profilePicture,
+        about: user.about,
+        rating: user.rating,
+        reviews: user.reviews,
+        skills: user.skills,
+        fields: user.fields,
+        meetings: user.meetings,
+        certificates: user.certificates,
       },
     });
   } catch (err) {

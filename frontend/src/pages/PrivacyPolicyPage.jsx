@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 const PrivacyPolicyPage = () => {
   return (
     <div>
-      <Navbar />
       <div className="bg-gradient-to-b from-teal-50 to-white min-h-screen">
         <div className="container mx-auto py-12 px-6 pt-24">
           <h1 className="text-4xl font-extrabold text-gray-800 text-center mb-8">

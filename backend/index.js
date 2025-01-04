@@ -23,7 +23,6 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/auth", require("./routes/userRoutes"));
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/user", require("./routes/userRoutes"));
-app.use("/api/mentee", require("./routes/mentee.js"));
 app.use(errorMiddleware);
 
 // Test route

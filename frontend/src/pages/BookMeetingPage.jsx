@@ -28,7 +28,6 @@ const BookMeetingPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       <main className="flex-grow bg-gray-50 py-12">
         <div className="container mx-auto px-6">
           <h1 className="text-3xl font-bold text-teal-600 mb-8">

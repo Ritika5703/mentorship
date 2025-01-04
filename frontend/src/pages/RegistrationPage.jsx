@@ -79,7 +79,6 @@ const RegistrationPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="min-h-screen flex items-center bg-gradient-to-r from-green-50 to-green-200 justify-center bg-gray-50 py-12 px-6 pt-20">
         <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-10">
           <h2 className="text-3xl font-extrabold text-green-800 text-center mb-6">
