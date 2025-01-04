@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
 
-  // Assuming we retrieve the current user profile from the context or state
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [location, setLocation] = useState("New York, USA");
-  const [bio, setBio] = useState(
-    "Aspiring software developer looking to connect with experienced mentors in web development."
-  );
-  const [profilePicture, setProfilePicture] = useState(
-    "https://via.placeholder.com/150"
-  );
+  // State variables to hold the user profile data
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
+  const [bio, setBio] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [loading, setLoading] = useState(true); // To show a loading state while fetching data
 
+  // Fetching the profile data when the component mounts
+  useEffect(() => {
+    // Replace with your actual API endpoint to fetch the user profile
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("/api/user/profile", {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer your-auth-token", // Add the auth token if necessary
+          },
+        });
+        const data = await response.json();
+        setName(data.name);
+        setEmail(data.email);
+        setLocation(data.location);
+        setBio(data.bio);
+        setProfilePicture(
+          data.profilePicture || "https://via.placeholder.com/150"
+        ); // Default picture if not available
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false); // Set loading to false after the data is fetched
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // Handle file upload for the profile picture
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -26,11 +53,43 @@ const EditProfilePage = () => {
     }
   };
 
-  const handleSaveChanges = () => {
-    // Here you would save the data to the server or update global state
-    alert("Profile updated successfully!");
-    navigate("/mentee-profile");
+  // Handle saving the changes
+  const handleSaveChanges = async () => {
+    // Create an object with the updated profile data
+    const updatedProfile = {
+      name,
+      email,
+      location,
+      bio,
+      profilePicture,
+    };
+
+    try {
+      const response = await fetch("/api/user/profile", {
+        method: "PUT", // Use PUT for updating resources
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer your-auth-token", // Add the auth token if necessary
+        },
+        body: JSON.stringify(updatedProfile), // Send the updated profile data
+      });
+
+      if (response.ok) {
+        alert("Profile updated successfully!");
+        navigate("/mentee-profile"); // Redirect to the profile page after success
+      } else {
+        throw new Error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Failed to update profile");
+    }
   };
+
+  // If the profile is still loading, show a loading spinner or message
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="bg-gradient-to-r from-[#E6FFFA] to-[#38B2AC] min-h-screen">

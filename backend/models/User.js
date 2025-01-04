@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 
+const meetingSchema = new mongoose.Schema({
+  theme: String,
+  mentor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  date: Date,
+  reminder: Number,
+  status: { type: String, default: "upcoming" },
+});
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -32,16 +40,24 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["mentee", "mentor"],
-      required: true,
+      default: "mentee", // Default role is "mentee"
+    },
+    mentorDetails: {
+      requested: { type: Boolean, default: false }, // If a mentor request is submitted
+      approved: { type: Boolean, default: false }, // Admin approval status
+      fields: [String], // Fields of expertise
+      yearsOfExperience: Number,
+      currentCompany: String,
     },
     meetings: [
-      {
-        mentor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        theme: String,
-        date: Date,
-        status: { type: String, enum: ["upcoming", "completed", "cancelled"] },
-        reminder: { type: Number, default: 24 }, // hours before meeting
-      },
+      meetingSchema,
+      // {
+      //   mentor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      //   theme: String,
+      //   date: Date,
+      //   status: { type: String, enum: ["upcoming", "completed", "cancelled"] },
+      //   reminder: { type: Number, default: 24 }, // hours before meeting
+      // },
     ],
     certificates: [
       {

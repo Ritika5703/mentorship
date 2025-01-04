@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import Loader from "../components/Loader";
+import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
 
 const MenteeProfilePage = () => {
   const navigate = useNavigate();
@@ -11,26 +12,28 @@ const MenteeProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTab, setSelectedTab] = useState("upcoming");
+  const [showMentorModal, setShowMentorModal] = useState(false);
+  const [mentorDetails, setMentorDetails] = useState({
+    experience: "",
+    skills: "",
+    field: "",
+    company: "",
+    bio: "",
+    timeSlots: "",
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log("Using token:", token); // Debug token
-
         const response = await axios.get(
           "http://localhost:4000/api/mentee-profile",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        console.log("Profile response:", response.data); // Debug response
         setUser(response.data);
       } catch (err) {
-        console.error("Full error object:", err); // Debug error
         setError(err.response?.data?.message || "Failed to load profile");
       } finally {
         setLoading(false);
@@ -39,15 +42,14 @@ const MenteeProfilePage = () => {
 
     fetchProfile();
   }, []);
+
   const handleCancelMeeting = async (meetingId) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
         `http://localhost:4000/api/meetings/${meetingId}/cancel`,
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       // Update local state to reflect the cancellation
@@ -62,6 +64,22 @@ const MenteeProfilePage = () => {
     } catch (err) {
       console.error("Error canceling meeting:", err);
       alert("Failed to cancel meeting");
+    }
+  };
+
+  const handleBecomeMentor = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://localhost:4000/api/become-mentor",
+        { ...mentorDetails },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("You are now a mentor!");
+      setShowMentorModal(false);
+    } catch (err) {
+      console.error("Error becoming mentor:", err);
+      alert("Failed to become mentor. Please try again.");
     }
   };
 
@@ -85,7 +103,6 @@ const MenteeProfilePage = () => {
       <div className="bg-gray-50 min-h-screen pt-20">
         <div className="container mx-auto py-12 px-6">
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-            {/* Header Section */}
             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200">
               <h1 className="text-2xl font-bold">Mentee Profile</h1>
               <div className="flex items-center gap-4">
@@ -110,7 +127,6 @@ const MenteeProfilePage = () => {
               </div>
             </div>
 
-            {/* Profile Details */}
             <div className="px-8 py-6 flex gap-8">
               <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-teal-500">
                 <img
@@ -137,7 +153,6 @@ const MenteeProfilePage = () => {
               </div>
             </div>
 
-            {/* Tabs */}
             <div className="px-8 py-4 border-t border-gray-200">
               <div className="flex gap-6">
                 {["upcoming", "history", "certificates", "reviews"].map(
@@ -158,7 +173,6 @@ const MenteeProfilePage = () => {
               </div>
             </div>
 
-            {/* Tab Content */}
             <div className="px-8 py-6">
               {selectedTab === "upcoming" && (
                 <div>
@@ -199,90 +213,15 @@ const MenteeProfilePage = () => {
                     ))}
                 </div>
               )}
-              {selectedTab === "history" && (
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Meeting History</h3>
-                  {user.meetings
-                    .filter((meeting) => meeting.status === "completed")
-                    .map((meeting) => (
-                      <div
-                        key={meeting._id}
-                        className="bg-gray-100 p-4 rounded-lg mb-4"
-                      >
-                        <p>
-                          <strong>Theme:</strong> {meeting.theme}
-                        </p>
-                        <p>
-                          <strong>Mentor:</strong> {meeting.mentor.name}
-                        </p>
-                        <p>
-                          <strong>Date:</strong>{" "}
-                          {new Date(meeting.date).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              )}
-              {selectedTab === "certificates" && (
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Certificates</h3>
-                  {user.certificates.map((cert) => (
-                    <div
-                      key={cert._id}
-                      className="bg-gray-100 p-4 rounded-lg mb-4"
-                    >
-                      <p>
-                        <strong>Name:</strong> {cert.name}
-                      </p>
-                      <p>
-                        <strong>Issued:</strong>{" "}
-                        {new Date(cert.issueDate).toLocaleDateString()}
-                      </p>
-                      <p>
-                        <strong>Issuer:</strong> {cert.issuer}
-                      </p>
-                      <a
-                        href={cert.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-teal-500 hover:underline"
-                      >
-                        View Certificate
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {selectedTab === "reviews" && (
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Reviews</h3>
-                  {user.reviews.map((review) => (
-                    <div
-                      key={review._id}
-                      className="bg-gray-100 p-4 rounded-lg mb-4"
-                    >
-                      <p>
-                        <strong>Rating:</strong> {review.rating}/5
-                      </p>
-                      <p>
-                        <strong>Comment:</strong> {review.comment}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {new Date(review.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+
+              {/* Other Tabs */}
             </div>
 
-            {/* About Section */}
             <div className="px-8 py-6 border-t border-gray-200">
               <h2 className="text-xl font-bold">About</h2>
               <p className="mt-4">{user.about}</p>
             </div>
 
-            {/* Skills Section */}
             <div className="px-8 py-6 border-t border-gray-200">
               <h2 className="text-xl font-bold">Skills</h2>
               <div className="flex flex-wrap gap-2 mt-4">
@@ -296,9 +235,24 @@ const MenteeProfilePage = () => {
                 ))}
               </div>
             </div>
+
+            <div className="px-8 py-6">
+              <button
+                onClick={() => setShowMentorModal(true)}
+                className="bg-teal-500 text-white px-4 py-2 rounded-lg"
+              >
+                Become a Mentor
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      <MentorRequestModal
+        show={showMentorModal}
+        onClose={() => setShowMentorModal(false)}
+        onSubmit={handleBecomeMentor}
+      />
       <Footer />
     </div>
   );

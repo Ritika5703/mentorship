@@ -95,14 +95,14 @@ const PrivacyPolicyModal = ({ isOpen, onRequestClose }) => {
         </p>
       </div>
 
-      <div className="modal-footer py-4 px-6 border-t">
+      {/* <div className="modal-footer py-4 px-6 border-t">
         <button
           onClick={onRequestClose}
           className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 transition"
         >
           I Agree
         </button>
-      </div>
+      </div> */}
     </Modal>
   );
 };

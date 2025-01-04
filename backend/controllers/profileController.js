@@ -64,3 +64,42 @@ exports.addMeeting = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Fetch user profile
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id); // req.user.id comes from JWT
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Update user profile
+exports.updateUserProfile = async (req, res) => {
+  const { name, email, location, bio, profilePicture } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user data
+    user.name = name;
+    user.email = email;
+    user.location = location;
+    user.bio = bio;
+    user.profilePicture = profilePicture;
+
+    await user.save();
+    res.json({ message: "Profile updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
