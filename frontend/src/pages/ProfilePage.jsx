@@ -10,7 +10,6 @@ import { AuthContext } from "../context/AuthContext";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  // const [user, setUser] = useState(state);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedTab, setSelectedTab] = useState("upcoming");
@@ -199,7 +198,7 @@ const ProfilePage = () => {
                 ))}
               </div>
             </div>
-
+            { !user.role == "mentor" && (
             <div className="px-8 py-6">
               <button
                 onClick={() => setShowMentorModal(true)}
@@ -208,6 +207,7 @@ const ProfilePage = () => {
                 Become a Mentor
               </button>
             </div>
+            )}
           </div>
         </div>
       </div>
