@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import axios from "axios";
+// import Navbar from "../components/Navbar";
+// import axios from "axios";
 import Loader from "../components/Loader";
 import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
 import { useLocation } from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -16,11 +16,13 @@ const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [showMentorModal, setShowMentorModal] = useState(false);
 
-  const location = useLocation();
-  const { user } = location.state || {};
-  if (!user) {
-    navigate("/login");
-  }
+  const { user, logout } = useContext(AuthContext);
+
+  // const location = useLocation();
+  // const { user } = location.state || {};
+  // if (!user) {
+  //   navigate("/login");
+  // }
 
   // const handleCancelMeeting = async (meetingId) => {
   //   try {
@@ -45,7 +47,6 @@ const ProfilePage = () => {
   //     alert("Failed to cancel meeting");
   //   }
   // };
-
 
   if (loading) return <Loader />;
   if (error)
@@ -212,7 +213,7 @@ const ProfilePage = () => {
       </div>
 
       <MentorRequestModal
-        user = {user}
+        user={user}
         show={showMentorModal}
         onClose={() => setShowMentorModal(false)}
       />

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const [userRole, setUserRole] = useState("mentee"); // Default role is mentee
+  // const [userRole, setUserRole] = useState("mentee"); // Default role is mentee
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -27,9 +27,8 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Store the token and user data
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userRole", data.user.role); // Store the role
+        // Login via context
+        login(data.user, data.token);
 
         // Redirect to the user's profile page
         navigate("/profile", { state: { user: data.user } });
