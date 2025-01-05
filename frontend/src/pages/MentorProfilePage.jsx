@@ -17,7 +17,7 @@ const MentorProfilePage = () => {
         const response = await axios.get(
           `http://localhost:4000/api/mentor/${id}`
         );
-        setMentor(response.data);
+        setMentor(response.data.mentor);
         setLoading(false);
       } catch (err) {
         setError("Failed to load mentor data");
