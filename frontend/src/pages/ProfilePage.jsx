@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
 import Loader from "../components/Loader";
 import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
-import { useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const ProfilePage = () => {

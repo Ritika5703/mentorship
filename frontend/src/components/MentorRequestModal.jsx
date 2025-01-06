@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
   const [skills, setSkills] = useState(
@@ -68,14 +69,22 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (data.success) {
-        alert("You are now a mentor!");
+        toast.success("You are now a mentor");
         onClose();
       } else {
+<<<<<<< HEAD
         alert("Failed to become a mentor. Please try again.");
       }
     } catch (error) {
       console.error("Error becoming mentor:", error);
       alert("Failed to become a mentor. Please try again.");
+=======
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error becoming mentor:", error);
+      toast.error("Failed to become a mentor");
+>>>>>>> 9eebc415440ba49441ff6622cb465c98d300c3f8
     }
   };
 
