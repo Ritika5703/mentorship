@@ -35,4 +35,27 @@ const becomeMentor = async (req, res) => {
   }
 };
 
-module.exports = { becomeMentor };
+const allMentors = async (req, res) => {
+  try {
+    const mentors = await User.find({ role: "mentor" });
+
+    res.json({ success: true, mentors });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+const getMentor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const mentor = await User.findById(id);
+    res.json({ success: true, mentor });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+
+module.exports = { becomeMentor, allMentors, getMentor };

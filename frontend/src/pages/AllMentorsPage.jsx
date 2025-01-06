@@ -14,8 +14,9 @@ const AllMentorsPage = () => {
     // Fetch mentors from the backend
     const fetchMentors = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/mentor");
-        setMentors(response.data); // Assuming the API returns an array of mentors
+        const response = await axios.get("http://localhost:4000/api/mentor/all-mentors");
+        setMentors(response.data.mentors); // Assuming the API returns an array of mentors
+        
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch mentors");
@@ -39,7 +40,7 @@ const AllMentorsPage = () => {
               key={mentor._id || index}
               id={mentor._id} // Use the mentor's unique ID from the backend
               name={mentor.name}
-              role={mentor.expertise} // Update to match your backend schema
+              role={mentor.role} // Update to match your backend schema
               rating={mentor.rating}
               price={mentor.price}
             />
