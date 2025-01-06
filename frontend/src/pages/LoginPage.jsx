@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   // const [userRole, setUserRole] = useState("mentee"); // Default role is mentee
@@ -12,8 +13,6 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-
     try {
       const response = await fetch("http://localhost:4000/auth/login", {
         method: "POST",
@@ -22,22 +21,23 @@ const LoginPage = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+      
       const data = await response.json();
 
       if (data.success) {
         // Login via context
         login(data.user, data.token);
-
+        
+        toast.success("Logged in successfully");
         // Redirect to the user's profile page
         navigate("/", { state: { user: data.user } });
       } else {
-        setError(data.message || "Login failed");
-        console.error("Login error:", data);
+        console.error(data);
+        toast.error(data.message);
       }
     } catch (error) {
       console.error("Login error details:", error);
-      setError("Network error or server is not responding");
+      toast.error("Network error or server is not responding");
     }
   };
 
@@ -48,7 +48,6 @@ const LoginPage = () => {
           <h2 className="text-3xl font-extrabold text-green-800 text-center mb-6">
             Login to Your Account
           </h2>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
 
           {/* Login Form */}
           <form onSubmit={handleLogin}>

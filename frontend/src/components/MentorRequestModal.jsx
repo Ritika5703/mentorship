@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MentorRequestModal = ({
   user,
@@ -40,14 +41,14 @@ const MentorRequestModal = ({
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (data.success) {
-        alert("You are now a mentor!");
+        toast.success("You are now a mentor");
         onClose();
       } else {
-        alert("Failed to become mentor. Please try again.");
+        toast.error(data.message);
       }
     } catch (error) {
       console.error("Error becoming mentor:", error);
-      alert("Failed to become mentor. Please try again.");
+      toast.error("Failed to become a mentor");
     }
   };
 
