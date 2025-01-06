@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     location: String,
     experience: String,
-    education: String,
+    education: { type: String, default: "" }, // Ensure it's a string with default empty value
+    linkedin: { type: String, default: "" },
     meetingsAttended: { type: Number, default: 0 },
     rating: { type: Number, default: 0 },
     reviews: [

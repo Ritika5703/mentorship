@@ -14,9 +14,11 @@ const AllMentorsPage = () => {
     // Fetch mentors from the backend
     const fetchMentors = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/mentor/all-mentors");
+        const response = await axios.get(
+          "http://localhost:4000/api/mentor/all-mentors"
+        );
         setMentors(response.data.mentors); // Assuming the API returns an array of mentors
-        
+
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch mentors");

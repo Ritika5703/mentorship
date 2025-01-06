@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
@@ -31,7 +30,7 @@ const LoginPage = () => {
         login(data.user, data.token);
 
         // Redirect to the user's profile page
-        navigate("/profile", { state: { user: data.user } });
+        navigate("/", { state: { user: data.user } });
       } else {
         setError(data.message || "Login failed");
         console.error("Login error:", data);
@@ -90,7 +89,6 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

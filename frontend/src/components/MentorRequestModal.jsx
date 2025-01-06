@@ -1,9 +1,14 @@
 import React from "react";
 import axios from "axios";
 
-const MentorRequestModal = ({ user, show, onClose, onSubmit, defaultValues = {} }) => {
+const MentorRequestModal = ({
+  user,
+  show,
+  onClose,
+  onSubmit,
+  defaultValues = {},
+}) => {
   if (!show) return null;
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +22,10 @@ const MentorRequestModal = ({ user, show, onClose, onSubmit, defaultValues = {} 
 
     const requestData = {
       _id: formData.get("_id"),
-      fields: formData.get("fields").split(",").map((field) => field.trim()),
+      fields: formData
+        .get("fields")
+        .split(",")
+        .map((field) => field.trim()),
       yearsOfExperience: parseInt(formData.get("yearsOfExperience"), 10),
       currentCompany: formData.get("currentCompany"),
       about: formData.get("about"),
@@ -26,18 +34,17 @@ const MentorRequestModal = ({ user, show, onClose, onSubmit, defaultValues = {} 
 
     try {
       const token = localStorage.getItem("token");
-      const {data} = await axios.post("http://localhost:4000/api/mentor/become-mentor",
+      const { data } = await axios.post(
+        "http://localhost:4000/api/mentor/become-mentor",
         requestData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (data.success){
-          alert("You are now a mentor!");
-          onClose();
+      if (data.success) {
+        alert("You are now a mentor!");
+        onClose();
       } else {
-          alert("Failed to become mentor. Please try again.");
+        alert("Failed to become mentor. Please try again.");
       }
-      
-    
     } catch (error) {
       console.error("Error becoming mentor:", error);
       alert("Failed to become mentor. Please try again.");

@@ -92,7 +92,7 @@ const EditProfilePage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-[#E6FFFA] to-[#38B2AC] min-h-screen">
+    <div className="bg-gradient-to-r from-[#E6FFFA] to-[#38B2AC] min-h-screen pt-20">
       <div className="container mx-auto py-16 px-6">
         <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="p-8">

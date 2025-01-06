@@ -1,6 +1,5 @@
 import Footer from "../components/Footer";
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 
 const BecomeTutorPage = () => {
   const [formData, setFormData] = useState({
@@ -231,7 +230,6 @@ const BecomeTutorPage = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

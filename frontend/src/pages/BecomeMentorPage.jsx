@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import AOS from "aos"; // Import AOS library for animations
 import "aos/dist/aos.css"; // Import AOS styles
 import MentorCarousel from "../components/MentorCarousel";
@@ -237,7 +235,6 @@ const BecomeMentorPage = () => {
           Become a Mentor
         </Link>
       </section>
-      <Footer />
     </div>
   );
 };

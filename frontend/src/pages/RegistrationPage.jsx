@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
@@ -193,7 +191,6 @@ const RegistrationPage = () => {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
-// import Navbar from "../components/Navbar";
 // import axios from "axios";
 import Loader from "../components/Loader";
 import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
@@ -198,15 +196,15 @@ const ProfilePage = () => {
                 ))}
               </div>
             </div>
-            { !user.role == "mentor" && (
-            <div className="px-8 py-6">
-              <button
-                onClick={() => setShowMentorModal(true)}
-                className="bg-teal-500 text-white px-4 py-2 rounded-lg"
-              >
-                Become a Mentor
-              </button>
-            </div>
+            {user.role !== "mentor" && (
+              <div className="px-8 py-6">
+                <button
+                  onClick={() => setShowMentorModal(true)}
+                  className="bg-teal-500 text-white px-4 py-2 rounded-lg"
+                >
+                  Become a Mentor
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -217,7 +215,6 @@ const ProfilePage = () => {
         show={showMentorModal}
         onClose={() => setShowMentorModal(false)}
       />
-      <Footer />
     </div>
   );
 };
