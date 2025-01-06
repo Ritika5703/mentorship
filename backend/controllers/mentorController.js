@@ -4,8 +4,15 @@ const Meeting = require("../models/Meeting");
 // Become a mentor
 const becomeMentor = async (req, res) => {
   try {
-    const { _id, fields, yearsOfExperience, currentCompany, about, skills } =
-      req.body;
+    const {
+      _id,
+      fields,
+      yearsOfExperience,
+      currentCompany,
+      linkedin,
+      about,
+      skills,
+    } = req.body;
 
     const user = await User.findById(_id);
     if (!user) {
@@ -16,6 +23,7 @@ const becomeMentor = async (req, res) => {
       fields: fields || [],
       yearsOfExperience: yearsOfExperience || 0,
       currentCompany: currentCompany || "",
+      linkedin: linkedin || "",
     };
 
     user.about = about || user.about;

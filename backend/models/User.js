@@ -17,6 +17,15 @@ const mentorDetailsSchema = new mongoose.Schema({
   fields: { type: [String], default: [] }, // Array of expertise fields
   yearsOfExperience: { type: Number, default: 0 },
   currentCompany: { type: String, default: "" },
+  linkedin: { type: String, default: "" },
+  certificates: [
+    {
+      name: String,
+      issueDate: Date,
+      issuer: String,
+      url: String,
+    },
+  ],
 });
 
 const userSchema = new mongoose.Schema(
@@ -27,7 +36,6 @@ const userSchema = new mongoose.Schema(
     location: String,
     experience: String,
     education: { type: String, default: "" }, // Ensure it's a string with default empty value
-    linkedin: { type: String, default: "" },
     meetingsAttended: { type: Number, default: 0 },
     rating: { type: Number, default: 0 },
     reviews: [
@@ -51,14 +59,6 @@ const userSchema = new mongoose.Schema(
     },
     mentorDetails: { type: mentorDetailsSchema, default: () => ({}) },
     meetings: { type: [meetingSchema], default: [] },
-    certificates: [
-      {
-        name: String,
-        issueDate: Date,
-        issuer: String,
-        url: String,
-      },
-    ],
   },
   { timestamps: true }
 );
