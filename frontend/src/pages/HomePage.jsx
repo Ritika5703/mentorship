@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const HomePage = () => {
+  const [mentors, setMentors] = useState([]);
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        // Replace this URL with your actual API endpoint
+        const response = await fetch(
+          "http://localhost:4000/api/mentor/all-mentors"
+        );
+        const data = await response.json();
+        setMentors(data); // Update state with the fetched mentor data
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      }
+    };
+
+    fetchMentors();
+  }, []);
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -118,11 +136,11 @@ const HomePage = () => {
           backgroundImage: `url('https://png.pngtree.com/thumb_back/fh260/back_our/20190621/ourmid/pngtree-learning-reading-knowledge-accumulation-psd-layering-image_191359.jpg')`,
         }}
       >
-        <h3 className="text-2xl font-extrabold mb-4">
+        <h3 className="text-2xl font-extrabold mb-4 text-teal-600">
           Want to share your knowledge with others?
         </h3>
         <Link
-          to="/become-a-mentor"
+          to="/login"
           className="px-8 py-4 bg-teal-600 rounded-xl text-white font-semibold shadow-md hover:bg-teal-700 transition-all"
         >
           Become a mentor

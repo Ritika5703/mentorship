@@ -51,11 +51,15 @@ const Footer = () => {
             <Link to="/all-mentors" className="hover:underline">
               All mentors
             </Link>
-            <Link to="/become-a-mentor" className="hover:underline">
+            {/* <Link to="/become-a-mentor" className="hover:underline">
               Become a mentor
-            </Link>
+            </Link> */}
+
             <Link to="/contact-us" className="hover:underline">
               Contact us
+            </Link>
+            <Link to="/login" className="hover:underline">
+              Sign in
             </Link>
           </div>
           <div className="flex flex-col space-y-2 text-sm">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
@@ -33,15 +34,18 @@ const RegistrationPage = () => {
       console.log("Response data:", data); // Log the response
 
       if (response.ok) {
+        toast.success("Registered successfully");
         console.log("Registration successful", data);
         window.location.href = "/login";
       } else {
         console.error("Error response:", data); // Log error details
         setError(data.message || "Registration failed");
+        toast.error(data.message);
       }
     } catch (err) {
       console.error("Fetch error:", err); // Log the actual error
       setError("Something went wrong. Please try again.");
+      toast.error("Network error or server is not responding");
     }
   };
 
@@ -69,11 +73,11 @@ const RegistrationPage = () => {
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    // Redirect to your backend or OAuth handler URL for social login
-    const baseURL = "https://localhost:3000/auth";
-    window.location.href = `${baseURL}/${provider}`;
-  };
+  // const handleSocialLogin = (provider) => {
+  //   // Redirect to your backend or OAuth handler URL for social login
+  //   const baseURL = "https://localhost:3000/auth";
+  //   window.location.href = `${baseURL}/${provider}`;
+  // };
 
   return (
     <div>
@@ -85,7 +89,7 @@ const RegistrationPage = () => {
           {error && <p className="text-red-500 mb-4">{error}</p>}
 
           {/* Social Login Buttons */}
-          <div className="space-y-4 mb-6">
+          {/* <div className="space-y-4 mb-6">
             <button
               onClick={() => handleSocialLogin("google")}
               className="w-full flex items-center justify-center bg-green-600 text-white py-3 rounded-lg shadow-md hover:bg-green-700 transition-all"
@@ -100,14 +104,14 @@ const RegistrationPage = () => {
               <FontAwesomeIcon icon={faLinkedin} className="w-6 h-6 mr-2" />
               Sign up with LinkedIn
             </button>
-          </div>
+          </div> */}
 
           {/* Divider */}
-          <div className="flex items-center justify-center my-6">
+          {/* <div className="flex items-center justify-center my-6">
             <div className="border-t w-1/3" />
             <span className="mx-4 text-sm text-gray-500">or</span>
             <div className="border-t w-1/3" />
-          </div>
+          </div> */}
 
           {/* Registration Form */}
           <form onSubmit={handleRegister}>

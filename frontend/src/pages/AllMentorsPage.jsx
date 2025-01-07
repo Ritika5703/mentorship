@@ -34,7 +34,7 @@ const AllMentorsPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="flex pt-20">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="flex-grow p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {mentors.map((mentor, index) => (
             <MentorCard

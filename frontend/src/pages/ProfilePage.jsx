@@ -95,10 +95,10 @@ const ProfilePage = () => {
                 />
               </div>
 
-              <div>
+              <div className="pt-10">
                 <h2 className="text-2xl font-bold">{user.name}</h2>
-                <p className="text-gray-600">{user.username}</p>
-                <p className="text-gray-600">{user.location}</p>
+                <p className="text-gray-600">{user.email}</p>
+                {/* <p className="text-gray-600">{user.location}</p>
                 <p className="text-gray-600 mt-4">
                   Years of experience: {user.experience}
                 </p>
@@ -108,7 +108,7 @@ const ProfilePage = () => {
                 </p>
                 <p className="text-gray-600">
                   Rating: {user.rating} ({user.reviews.length} reviews)
-                </p>
+                </p> */}
               </div>
             </div>
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
+  const [id] = useState(user?._id || "");
   const [skills, setSkills] = useState(
     defaultValues.skills || [{ name: "", level: 1 }]
   );
@@ -11,6 +12,15 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
       { name: "", issuer: "", issueDate: "", url: "" },
     ]
   );
+  const [fields, setFields] = useState(defaultValues.fields || []);
+  const [yearsOfExperience, setYearsOfExperience] = useState(
+    defaultValues.yearsOfExperience || ""
+  );
+  const [currentCompany, setCurrentCompany] = useState(
+    defaultValues.currentCompany || ""
+  );
+  const [about, setAbout] = useState(defaultValues.about || "");
+  const [linkedin, setLinkedin] = useState(defaultValues.linkedin || "");
 
   const handleSkillChange = (index, field, value) => {
     const updatedSkills = [...skills];
@@ -45,20 +55,23 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+
+    // Request data structure
     const requestData = {
-      _id: formData.get("_id"),
-      fields: formData
-        .get("fields")
-        .split(",")
-        .map((field) => field.trim()),
-      yearsOfExperience: parseInt(formData.get("yearsOfExperience"), 10),
-      currentCompany: formData.get("currentCompany"),
-      about: formData.get("about"),
-      skills: skills.filter((skill) => skill.name && skill.level),
+      _id: user.id,
+      fields: fields.filter((field) => field.trim() !== ""), // Ensure no empty fields are sent
+      yearsOfExperience: parseInt(yearsOfExperience, 10),
+      currentCompany,
+      about,
+      skills: skills.filter((skill) => skill.name && skill.level), // Filter out incomplete skills
       certificates: certificates.filter(
-        (certificate) => certificate.name && certificate.issuer
+        (certificate) =>
+          certificate.name &&
+          certificate.issuer &&
+          certificate.url &&
+          certificate.issueDate // Ensure certificate data is complete
       ),
+      linkedin,
     };
 
     try {
@@ -68,23 +81,16 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
         requestData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       if (data.success) {
         toast.success("You are now a mentor");
         onClose();
       } else {
-<<<<<<< HEAD
-        alert("Failed to become a mentor. Please try again.");
+        toast.error("Failed to become a mentor. Please try again.");
       }
     } catch (error) {
-      console.error("Error becoming mentor:", error);
-      alert("Failed to become a mentor. Please try again.");
-=======
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.error("Error becoming mentor:", error);
-      toast.error("Failed to become a mentor");
->>>>>>> 9eebc415440ba49441ff6622cb465c98d300c3f8
+      console.error("Error becoming mentor:", error.response || error); // Log the entire error response
+      toast.error("Failed to become a mentor. Please try again.");
     }
   };
 
@@ -114,9 +120,13 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
               </label>
               <input
                 type="text"
-                name="fields"
+                value={fields.join(", ")}
+                onChange={(e) =>
+                  setFields(
+                    e.target.value.split(",").map((field) => field.trim())
+                  )
+                }
                 className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                defaultValue={(defaultValues.fields || []).join(", ")}
                 required
               />
             </div>
@@ -128,9 +138,9 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
               </label>
               <input
                 type="number"
-                name="yearsOfExperience"
+                value={yearsOfExperience}
+                onChange={(e) => setYearsOfExperience(e.target.value)}
                 className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                defaultValue={defaultValues.yearsOfExperience || ""}
                 required
               />
             </div>
@@ -142,9 +152,9 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
               </label>
               <input
                 type="text"
-                name="currentCompany"
+                value={currentCompany}
+                onChange={(e) => setCurrentCompany(e.target.value)}
                 className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                defaultValue={defaultValues.currentCompany || ""}
                 required
               />
             </div>
@@ -156,9 +166,9 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
               </label>
               <input
                 type="text"
-                name="linkedin"
+                value={linkedin}
+                onChange={(e) => setLinkedin(e.target.value)}
                 className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                defaultValue={defaultValues.linkedin || ""}
                 required
               />
             </div>
@@ -170,9 +180,9 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
               About Yourself
             </label>
             <textarea
-              name="about"
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
               className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              defaultValue={defaultValues.about || ""}
               required
             />
           </div>
@@ -279,7 +289,6 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
                         e.target.value
                       )
                     }
-                    placeholder="Issue Date"
                     className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                   <input
@@ -288,7 +297,6 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
                     onChange={(e) =>
                       handleCertificateChange(index, "url", e.target.value)
                     }
-                    placeholder="Certificate URL"
                     className="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                   <button
@@ -300,6 +308,8 @@ const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
                   </button>
                 </div>
               ))}
+
+              {/* Add Certificate Button */}
               <button
                 type="button"
                 onClick={handleAddCertificate}

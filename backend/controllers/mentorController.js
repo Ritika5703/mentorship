@@ -12,34 +12,37 @@ const becomeMentor = async (req, res) => {
       linkedin,
       about,
       skills,
+      certificates,
     } = req.body;
 
+    if (!_id) return res.status(400).json({ message: "User ID is required." });
+
     const user = await User.findById(_id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found." });
 
     user.mentorDetails = {
       fields: fields || [],
       yearsOfExperience: yearsOfExperience || 0,
       currentCompany: currentCompany || "",
       linkedin: linkedin || "",
+      certificates: certificates || [],
     };
 
     user.about = about || user.about;
-    user.skills = (skills || []).map((skill) => ({
+    user.skills = skills?.map((skill) => ({
       name: skill.name,
       level: skill.level || 3,
     }));
     user.role = "mentor";
 
     await user.save();
+
     res.json({
       success: true,
       message: "Mentor request submitted successfully!",
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Error saving mentor request:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
