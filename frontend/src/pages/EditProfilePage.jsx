@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -134,7 +135,7 @@ const EditProfilePage = () => {
       );
 
       if (response.status === 200) {
-        alert("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
         navigate("/profile");
       }
     } catch (error) {
@@ -142,7 +143,7 @@ const EditProfilePage = () => {
       if (error.response?.status === 401) {
         navigate("/login");
       } else {
-        alert(error.response?.data?.message || "Failed to update profile");
+        toast.error(error.response?.data?.message || "Failed to update profile");
       }
     }
   };

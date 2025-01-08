@@ -7,7 +7,6 @@ const LoginPage = () => {
   // const [userRole, setUserRole] = useState("mentee"); // Default role is mentee
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -26,7 +25,7 @@ const LoginPage = () => {
 
       if (data.success) {
         // Login via context
-        login(data.user, data.token);
+        login(data);
         
         toast.success("Logged in successfully");
         // Redirect to the user's profile page

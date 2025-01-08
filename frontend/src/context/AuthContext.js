@@ -21,10 +21,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setIsLoggedin(true);
-    setUser(userData);
+    setUser(userData.user);
     // Save the user data and login state in localStorage
     localStorage.setItem("isLoggedin", "true");
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("user", JSON.stringify(userData.user));
+    localStorage.setItem("token", userData.token);
   };
 
   const logout = () => {
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     // Remove user data from localStorage
     localStorage.removeItem("isLoggedin");
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     toast.success("Logged out successfully");
   };
 
