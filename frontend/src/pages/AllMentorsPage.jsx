@@ -17,7 +17,8 @@ const AllMentorsPage = () => {
           "http://localhost:4000/api/mentor/all-mentors"
         );
         setMentors(response.data.mentors); // Assuming the API returns an array of mentors
-
+        console.log(response.data.mentors);
+        
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch mentors");
@@ -44,6 +45,7 @@ const AllMentorsPage = () => {
               role={mentor.role} // Update to match your backend schema
               rating={mentor.rating}
               price={mentor.price}
+              profilePicture = {mentor.profilePicture}
             />
           ))}
         </main>
