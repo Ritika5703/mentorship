@@ -1,20 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const { upload } = require("../config/multer");
 const {
-  getMenteeProfile,
-  updateMenteeProfile,
-  addMeeting,
-  getUserProfile,
-  updateUserProfile,
+  getProfile,
+  updateProfile,
 } = require("../controllers/profileController");
 
-router.post("/meetings", auth, addMeeting);
+// Get user profile
+router.get("/", auth, getProfile);
 
-// Route to get user profile (protected)
-router.get("/profile", auth, getUserProfile);
-
-// Route to update user profile (protected)
-router.put("/profile", auth, updateUserProfile);
+// Update user profile
+router.put("/update", auth, upload.single("profilePicture"), updateProfile);
 
 module.exports = router;

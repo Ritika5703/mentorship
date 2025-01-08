@@ -4,9 +4,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const profileRoutes = require("./routes/profile");
 const errorMiddleware = require("./error/error.js");
-const mentorRoutes = require('./routes/mentorRoutes.js');
+const mentorRoutes = require("./routes/mentorRoutes.js");
 
 const app = express();
+
+// Increase payload size limits
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Middleware
 app.use(
@@ -18,11 +22,12 @@ app.use(
 app.use(express.json());
 
 // Routes
-app.use("/api/", profileRoutes);
+app.use("/api/profile", profileRoutes);
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/auth", require("./routes/userRoutes"));
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/user", require("./routes/userRoutes"));
+app.use("/uploads", express.static("uploads"));
 app.use(errorMiddleware);
 
 // Test route

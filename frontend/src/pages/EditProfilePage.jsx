@@ -1,94 +1,155 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/Loader";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    location: "",
+    about: "",
+    profilePicture: "",
+  });
+  const [loading, setLoading] = useState(true);
 
-  // State variables to hold the user profile data
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
-  const [bio, setBio] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [loading, setLoading] = useState(true); // To show a loading state while fetching data
-
-  // Fetching the profile data when the component mounts
-  useEffect(() => {
-    // Replace with your actual API endpoint to fetch the user profile
-    const fetchUserProfile = async () => {
-      try {
-        const response = await fetch("/api/user/profile", {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer your-auth-token", // Add the auth token if necessary
-          },
-        });
-        const data = await response.json();
-        setName(data.name);
-        setEmail(data.email);
-        setLocation(data.location);
-        setBio(data.bio);
-        setProfilePicture(
-          data.profilePicture || "https://via.placeholder.com/150"
-        ); // Default picture if not available
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false); // Set loading to false after the data is fetched
+  // Fetch user profile when the component is mounted
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
       }
-    };
+      const response = await axios.get("http://localhost:4000/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setFormData(response.data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      if (error.response?.status === 401) {
+        navigate("/login");
+      } else {
+        alert("Error fetching profile. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserProfile();
   }, []);
 
-  // Handle file upload for the profile picture
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+  // Function to compress image
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          // Max dimension
+          const MAX_DIMENSION = 800;
+          if (width > height && width > MAX_DIMENSION) {
+            height *= MAX_DIMENSION / width;
+            width = MAX_DIMENSION;
+          } else if (height > MAX_DIMENSION) {
+            width *= MAX_DIMENSION / height;
+            height = MAX_DIMENSION;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert to blob
+          canvas.toBlob(
+            (blob) => {
+              resolve(blob);
+            },
+            file.type,
+            0.7
+          ); // 0.7 quality
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle image file upload and compression
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const compressedBlob = await compressImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData((prev) => ({
+            ...prev,
+            profilePicture: reader.result,
+          }));
+        };
+        reader.readAsDataURL(compressedBlob);
+      } catch (error) {
+        console.error("Error processing image:", error);
+        alert("Error processing image. Please try a different image.");
+      }
     }
   };
 
-  // Handle saving the changes
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle profile update
   const handleSaveChanges = async () => {
-    // Create an object with the updated profile data
-    const updatedProfile = {
-      name,
-      email,
-      location,
-      bio,
-      profilePicture,
-    };
-
     try {
-      const response = await fetch("/api/user/profile", {
-        method: "PUT", // Use PUT for updating resources
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer your-auth-token", // Add the auth token if necessary
-        },
-        body: JSON.stringify(updatedProfile), // Send the updated profile data
-      });
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      const response = await axios.put(
+        "http://localhost:4000/api/profile/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert("Profile updated successfully!");
-        navigate("/profile"); // Redirect to the profile page after success
-      } else {
-        throw new Error("Failed to update profile");
+        navigate("/profile");
       }
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert("Failed to update profile");
+      if (error.response?.status === 401) {
+        navigate("/login");
+      } else {
+        alert(error.response?.data?.message || "Failed to update profile");
+      }
     }
   };
 
-  // If the profile is still loading, show a loading spinner or message
+  // If loading, show the loader component
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -115,15 +176,15 @@ const EditProfilePage = () => {
                   onChange={handleFileUpload}
                   className="mt-4 p-2 border-2 border-gray-300 rounded-lg"
                 />
-                <div className="mt-4">
-                  {profilePicture && (
+                {formData.profilePicture && (
+                  <div className="mt-4">
                     <img
-                      src={profilePicture}
+                      src={formData.profilePicture}
                       alt="Profile Preview"
                       className="w-32 h-32 object-cover rounded-full"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Name Field */}
@@ -137,8 +198,9 @@ const EditProfilePage = () => {
                 <input
                   type="text"
                   id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                   className="w-full p-4 border-2 border-green-300 rounded-lg mt-2"
                 />
               </div>
@@ -154,8 +216,9 @@ const EditProfilePage = () => {
                 <input
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   className="w-full p-4 border-2 border-green-300 rounded-lg mt-2"
                 />
               </div>
@@ -171,30 +234,31 @@ const EditProfilePage = () => {
                 <input
                   type="text"
                   id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
                   className="w-full p-4 border-2 border-green-300 rounded-lg mt-2"
                 />
               </div>
 
-              {/* Bio Field */}
+              {/* About Field */}
               <div>
                 <label
-                  htmlFor="bio"
+                  htmlFor="about"
                   className="block text-lg font-medium text-gray-700"
                 >
-                  Bio
+                  About
                 </label>
                 <textarea
-                  id="bio"
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
+                  id="about"
+                  name="about"
+                  value={formData.about}
+                  onChange={handleInputChange}
                   className="w-full p-4 border-2 border-green-300 rounded-lg mt-2"
                   rows="4"
                 />
               </div>
 
-              {/* Save Button */}
               <div className="text-center mt-6">
                 <button
                   type="button"
