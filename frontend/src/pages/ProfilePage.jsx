@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import MentorRequestModal from "../components/MentorRequestModal"; // Ensure this component exists.
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -11,7 +12,48 @@ const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [showMentorModal, setShowMentorModal] = useState(false);
 
-  const { user, logout } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+
+  const updateProfilePicture = async (newProfilePictureUrl) => {
+    try {
+      // Update the user context with the new profile picture URL
+      setUser((prevUser) => ({
+        ...prevUser,
+        profilePicture: newProfilePictureUrl, // Update profile picture in context
+      }));
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
+  const handleProfilePictureUpdate = async (newProfilePictureBase64) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        "http://localhost:4000/api/profile/update", // Endpoint to update profile
+        { profilePicture: newProfilePictureBase64 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update profile picture in UI after successful backend update
+      const updatedUser = response.data.user;
+      updateProfilePicture(updatedUser.profilePicture); // Update profile picture in context
+      setError(null); // Clear any previous errors
+    } catch (err) {
+      console.error("Error uploading profile picture:", err);
+      setError("Failed to update profile picture");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.profilePicture) {
+      // When user context changes (including profile picture), trigger a re-render
+      // This ensures the updated image is immediately reflected in the UI
+    }
+  }, [user]);
 
   // const location = useLocation();
   // const { user } = location.state || {};
@@ -88,8 +130,13 @@ const ProfilePage = () => {
 
             <div className="px-8 py-6 flex gap-8">
               <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-teal-500">
+                {/* Append timestamp to the image URL to force the browser to reload */}
                 <img
-                  src={user.profilePicture}
+                  src={
+                    user.profilePicture
+                      ? `${user.profilePicture}?${new Date().getTime()}`
+                      : "https://via.placeholder.com/150"
+                  } // Add timestamp query param to prevent caching
                   alt={`${user.name}'s profile`}
                   className="w-full h-full object-cover"
                 />
