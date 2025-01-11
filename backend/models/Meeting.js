@@ -1,5 +1,28 @@
 const mongoose = require("mongoose");
 
+const notificationSchema = new mongoose.Schema(
+  {
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now, 
+    },
+  },
+  { _id: false }
+);
+
 const meetingSchema = new mongoose.Schema(
   {
     mentor: {
@@ -10,6 +33,10 @@ const meetingSchema = new mongoose.Schema(
     mentee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    topic: {
+      type: String,
       required: true,
     },
     date: {
@@ -27,6 +54,7 @@ const meetingSchema = new mongoose.Schema(
     },
     meetingLink: String,
     notes: String,
+    notifications: [notificationSchema],
   },
   {
     timestamps: true,

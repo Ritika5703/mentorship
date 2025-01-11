@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  Calendar,
   Clock,
-  MapPin,
   Star,
   Mail,
   Video,
@@ -13,9 +11,11 @@ import {
   Globe,
   Twitter,
   Linkedin,
-  ChevronRight,
+  Notebook
 } from "lucide-react";
 import Loader from "../components/Loader";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AvailabilityCard = ({ slot, isSelected, onClick }) => (
   <div
@@ -39,7 +39,9 @@ const MentorProfilePage = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
-  const [message, setMessage] = useState("");
+  const [topic, setTopic] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMentorData = async () => {
@@ -61,13 +63,40 @@ const MentorProfilePage = () => {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!mentor) return <div>Mentor not found</div>;
 
-  // Handle sending the contact message
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    // For now, just log the message to the console
-    console.log("Message sent to mentor:", message);
-    setShowContactModal(false); // Close modal after sending
-  };
+  const bookMeeting = async () => { 
+    // Implement the booking functionality
+    setLoading(true);
+    if (!localStorage.getItem('token')) {
+      return navigate("/login");
+    }
+    if (!selectedDate || !selectedTimeSlot) {
+      toast.error("Please select a date and time slot");
+      return;
+    }
+    if (!topic) {
+      toast.error("Please enter a topic");
+      return;
+    }
+    try {
+      const { data } = await axios.post("http://localhost:4000/api/mentor/book-meeting",
+        { mentorId: mentor._id, date: selectedDate, timeSlot: selectedTimeSlot, topic: topic },
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+      );
+      setLoading(false);
+
+      if (data.success) {
+        toast.success(data.message);
+        setShowBookingModal(false);
+      } else {
+        console.error(data);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error booking meeting:", error);
+      toast.error(error.response.data.message);
+    }
+   }
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -243,6 +272,17 @@ const MentorProfilePage = () => {
                       onChange={(e) => setSelectedDate(e.target.value)}
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Enter Topic
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded-lg"
+                      onChange={(e) => setTopic(e.target.value)}
+                      placeholder="Enter a topic"
+                    />
+                  </div>
 
                   {selectedDate && (
                     <div>
@@ -251,11 +291,11 @@ const MentorProfilePage = () => {
                       </label>
                       <div className="grid grid-cols-2 gap-2">
                         {[
-                          "09:00 AM",
-                          "10:00 AM",
-                          "11:00 AM",
-                          "02:00 PM",
-                          "03:00 PM",
+                          "09:00 AM - 10:00 AM",
+                          "10:00 AM - 11:00 AM",
+                          "11:00 AM - 12:00 PM",
+                          "02:00 PM - 03:00 PM",
+                          "03:00 PM - 04:00 PM",
                         ].map((slot) => (
                           <AvailabilityCard
                             key={slot}
@@ -270,7 +310,7 @@ const MentorProfilePage = () => {
 
                   <button
                     onClick={() => setShowBookingModal(true)}
-                    disabled={!selectedDate || !selectedTimeSlot}
+                    disabled={!selectedDate || !selectedTimeSlot || !topic}
                     className={`w-full py-3 rounded-lg flex items-center justify-center gap-2 
                       ${
                         selectedDate && selectedTimeSlot
@@ -358,16 +398,20 @@ const MentorProfilePage = () => {
                   <CalendarIcon className="w-5 h-5 text-teal-600" />
                   <span className="font-medium">{selectedDate}</span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mb-3">
                   <Clock className="w-5 h-5 text-teal-600" />
                   <span className="font-medium">{selectedTimeSlot}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Notebook className="w-5 h-5 text-teal-600" />
+                  <span className="font-medium">{topic}</span>
                 </div>
               </div>
 
               <button
                 className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
                 onClick={() => {
-                  // Handle booking confirmation
+                  bookMeeting();
                   setShowBookingModal(false);
                 }}
               >
