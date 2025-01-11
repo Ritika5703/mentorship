@@ -15,13 +15,13 @@ import React from "react";
 import Logout from "./pages/Logout.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <div>
       <Navbar />
-      <ToastContainer 
+      <Toaster
         position="top-center"
       />
       <Routes>

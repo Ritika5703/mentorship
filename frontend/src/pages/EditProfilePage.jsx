@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();

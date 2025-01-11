@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const LoginPage = () => {
   // const [userRole, setUserRole] = useState("mentee"); // Default role is mentee

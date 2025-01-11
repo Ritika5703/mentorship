@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Loader from "../components/Loader";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const AvailabilityCard = ({ slot, isSelected, onClick }) => (
   <div
