@@ -156,15 +156,14 @@ const EditProfilePage = () => {
   return (
     <div className="bg-gradient-to-r from-[#E6FFFA] to-[#38B2AC] min-h-screen pt-20">
       <div className="container mx-auto py-16 px-6">
-        <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="p-8">
+        <div className="max-w-5xl mx-auto bg-white shadow-lg p-6 rounded-lg overflow-hidden flex flex-col items-center">
             <h1 className="text-4xl font-bold text-[#388E3C]">
               Edit Your Profile
             </h1>
 
-            <form className="space-y-6 mt-8">
+            <form className="space-y-6 mt-8 w-full max-w-lg  flex items-center flex-col">
               {/* Profile Picture */}
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="profilePicture"
                   className="block text-lg font-medium text-gray-700"
@@ -175,10 +174,10 @@ const EditProfilePage = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleFileUpload}
-                  className="mt-4 p-2 border-2 border-gray-300 rounded-lg"
+                  className="mt-4 p-2 border-2 border-gray-300 rounded-lg w-full"
                 />
                 {formData.profilePicture && (
-                  <div className="mt-4">
+                  <div className="mt-4 self-center w-full flex justify-center">
                     <img
                       src={formData.profilePicture}
                       alt="Profile Preview"
@@ -189,7 +188,7 @@ const EditProfilePage = () => {
               </div>
 
               {/* Name Field */}
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="name"
                   className="block text-lg font-medium text-gray-700"
@@ -207,7 +206,7 @@ const EditProfilePage = () => {
               </div>
 
               {/* Email Field */}
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="email"
                   className="block text-lg font-medium text-gray-700"
@@ -225,7 +224,7 @@ const EditProfilePage = () => {
               </div>
 
               {/* Location Field */}
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="location"
                   className="block text-lg font-medium text-gray-700"
@@ -243,7 +242,7 @@ const EditProfilePage = () => {
               </div>
 
               {/* About Field */}
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="about"
                   className="block text-lg font-medium text-gray-700"
@@ -260,7 +259,7 @@ const EditProfilePage = () => {
                 />
               </div>
 
-              <div className="text-center mt-6">
+              <div className="text-center mt-6 clas">
                 <button
                   type="button"
                   onClick={handleSaveChanges}
@@ -270,7 +269,6 @@ const EditProfilePage = () => {
                 </button>
               </div>
             </form>
-          </div>
         </div>
       </div>
     </div>
