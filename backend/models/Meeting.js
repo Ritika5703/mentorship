@@ -1,28 +1,5 @@
 const mongoose = require("mongoose");
 
-const notificationSchema = new mongoose.Schema(
-  {
-    recipient: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    message: {
-      type: String,
-      required: true,
-    },
-    read: {
-      type: Boolean,
-      default: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now, 
-    },
-  },
-  { _id: false }
-);
-
 const meetingSchema = new mongoose.Schema(
   {
     mentor: {
@@ -49,12 +26,11 @@ const meetingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "completed", "cancelled"],
+      enum: ["pending", "accepted", "completed", "rejected"],
       default: "pending",
     },
     meetingLink: String,
     notes: String,
-    notifications: [notificationSchema],
   },
   {
     timestamps: true,

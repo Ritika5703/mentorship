@@ -9,13 +9,13 @@ import MentorProfilePage from "./pages/MentorProfilePage";
 import BookMeetingPage from "./pages/BookMeetingPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
-import Notifications from "./components/Notifications.jsx";
 import Settings from "./components/Settings.jsx";
 import React from "react";
 import Logout from "./pages/Logout.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import { Toaster } from "react-hot-toast";
+import NotificationsPage from "./pages/NotificationsPage.jsx";
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>
       <Footer />

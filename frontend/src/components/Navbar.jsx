@@ -55,6 +55,14 @@ const Navbar = () => {
           >
             Contact us
           </Link>
+          { isLoggedin &&
+          <Link
+            to="/notifications"
+            className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
+          >
+            Notifications
+          </Link>
+          }
         </div>
 
         <div className="flex items-center space-x-4">

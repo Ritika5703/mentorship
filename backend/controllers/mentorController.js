@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Meeting = require("../models/Meeting");
+const notifications = require("../models/notifications");
 
 // Become a mentor
 const becomeMentor = async (req, res) => {
@@ -123,8 +124,6 @@ const bookMeeting = async (req, res) => {
     }
 
     // Create a new meeting
-    console.log(req.user);
-    
     const meeting = new Meeting({
       mentor: mentorId,
       mentee: req.user.id,
@@ -132,21 +131,22 @@ const bookMeeting = async (req, res) => {
       timeSlot,
       topic,
       status: "pending",
-      notifications: [
-        {
-          recipient: mentorId,
-          message: `You have a new meeting request from ${req.user.name || 'a mentee'}.`,
-        },
-      ],
     });
 
     // Save the meeting to the database
     await meeting.save();
 
-    // Update mentor's meetings attended count
-    await User.findByIdAndUpdate(mentorId, {
-      $inc: { meetingsAttended: 1 },
+    // Create a notification for the mentor
+    const notification = new notifications({
+      recipient: mentorId,
+      sender: req.user.id,
+      meetingId: meeting.id,
+      message: `You have a new meeting request for ${topic} on ${date} during ${timeSlot}.`,
+      read: false,
     });
+
+    // Save the notification to the database
+    await notification.save();
 
     // Respond with success message and meeting details
     res.json({

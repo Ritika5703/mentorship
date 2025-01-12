@@ -62,6 +62,7 @@ const MentorProfilePage = () => {
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500">{error}</div>;
   if (!mentor) return <div>Mentor not found</div>;
+  
 
   const bookMeeting = async () => { 
     // Implement the booking functionality
@@ -270,6 +271,7 @@ const MentorProfilePage = () => {
                       type="date"
                       className="w-full p-2 border rounded-lg"
                       onChange={(e) => setSelectedDate(e.target.value)}
+                      value={selectedDate}
                     />
                   </div>
                   <div>
@@ -281,6 +283,7 @@ const MentorProfilePage = () => {
                       className="w-full p-2 border rounded-lg"
                       onChange={(e) => setTopic(e.target.value)}
                       placeholder="Enter a topic"
+                      value={topic}
                     />
                   </div>
 
