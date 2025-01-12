@@ -6,76 +6,6 @@ body {
   font-family: "Arial", sans-serif;
 }
 
-/* Glowing Logo Effect */
-@keyframes glowing-logo {
-  0% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
-      0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.6);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
-      0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.8);
-  }
-  100% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
-      0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.6);
-  }
-}
-
-/* Applying the glowing effect to the GuidingLight text */
-.animate-glowing-logo {
-  animation: glowing-logo 3s infinite ease-in-out;
-  font-weight: bold;
-}
-
-/* Optional: Adding a subtle "light burst" effect on the star */
-@keyframes pulse-star {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Animating the light burst on the star */
-.animate-pulse {
-  animation: pulse-star 1s infinite ease-in-out;
-}
-
-/* Optional: Adding a light streak that moves behind the logo */
-@keyframes light-streak {
-  0% {
-    background-position: -200% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-/* Creating the light streak */
-.guiding-light-streak {
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 400% 100%;
-  animation: light-streak 3s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: -200%;
-  height: 3px;
-  width: 100%;
-  transform: translateY(-50%);
-}
 /* Modal Overlay (background) */
 .modal-overlay {
   position: fixed;
@@ -107,6 +37,6 @@ body {
   overflow-y: auto; /* Enable vertical scrolling */
 }
 
-/* *{
-  background-color: #282c34;
-} */
+.active {
+  color: #0d9488;
+}

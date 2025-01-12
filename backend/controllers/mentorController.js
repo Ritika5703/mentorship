@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Meeting = require("../models/Meeting");
+const notifications = require("../models/notifications");
 
 // Become a mentor
 const becomeMentor = async (req, res) => {
@@ -104,22 +105,25 @@ const bookMeeting = async (req, res) => {
   try {
     const { mentorId, date, timeSlot, topic } = req.body;
 
+    // Verify mentor existence and role
     const mentor = await User.findById(mentorId);
     if (!mentor || mentor.role !== "mentor") {
       return res.status(404).json({ message: "Mentor not found" });
     }
 
+    // Check if the time slot is already booked for the mentor
     const existingMeeting = await Meeting.findOne({
       mentor: mentorId,
       date,
       timeSlot,
-      status: { $nin: ["cancelled"] },
+      status: { $nin: ["cancelled"] }, // Exclude cancelled meetings
     });
 
     if (existingMeeting) {
       return res.status(400).json({ message: "Time slot not available" });
     }
 
+    // Create a new meeting
     const meeting = new Meeting({
       mentor: mentorId,
       mentee: req.user.id,
@@ -129,12 +133,22 @@ const bookMeeting = async (req, res) => {
       status: "pending",
     });
 
+    // Save the meeting to the database
     await meeting.save();
 
-    await User.findByIdAndUpdate(mentorId, {
-      $inc: { meetingsAttended: 1 },
+    // Create a notification for the mentor
+    const notification = new notifications({
+      recipient: mentorId,
+      sender: req.user.id,
+      meetingId: meeting.id,
+      message: `You have a new meeting request for ${topic} on ${date} during ${timeSlot}.`,
+      read: false,
     });
 
+    // Save the notification to the database
+    await notification.save();
+
+    // Respond with success message and meeting details
     res.json({
       success: true,
       message: "Meeting booked successfully",

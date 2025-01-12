@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const MentorRequestModal = ({ user, show, onClose, defaultValues = {} }) => {
   const [id] = useState(user?._id || "");

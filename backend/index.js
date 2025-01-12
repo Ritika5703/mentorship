@@ -5,6 +5,7 @@ const cors = require("cors");
 const profileRoutes = require("./routes/profile");
 const errorMiddleware = require("./error/error.js");
 const mentorRoutes = require("./routes/mentorRoutes.js");
+const meetingRoutes = require("./routes/meetingRoute.js");
 
 const app = express();
 
@@ -27,8 +28,11 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/auth", require("./routes/userRoutes"));
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/meetings", meetingRoutes);
 app.use("/uploads", express.static("uploads"));
+app.use("/api/notifications", require("./routes/notificationsRoute.js"));
 app.use(errorMiddleware);
+
 
 // Test route
 app.get("/api/test", (req, res) => {
