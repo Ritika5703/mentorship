@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // Create the context for authentication
 export const AuthContext = createContext();
@@ -7,6 +8,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [user, setUser] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check localStorage for the user data when the app loads
@@ -36,47 +39,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     toast.success("Logged out successfully");
+    navigate("/");
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedin, user, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedin, setIsLoggedin, user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null); // Stores user data
-//   const [token, setToken] = useState(null); // Stores authentication token
-//   const [loading, setLoading] = useState(true); // For showing loaders while context initializes
-//   const [isLoggedin, setisLoggedin] = useState(false);
-
-//   const navigate = useNavigate();
-
-//   // Initialize user and token from localStorage
-//   useEffect(() => {
-//     const savedUser = JSON.parse(localStorage.getItem("user"));
-//     const savedToken = localStorage.getItem("token");
-//     if (savedUser && savedToken) {
-//       setUser(savedUser);
-//       setToken(savedToken);
-//     }
-//     setLoading(false); // Done initializing
-//   }, []);
-
-//   const login = (userData, authToken) => {
-//     setUser(userData);
-//     setToken(authToken);
-//     localStorage.setItem("user", JSON.stringify(userData));
-//     localStorage.setItem("token", authToken);
-//     setisLoggedin(true);
-//   };
-
-//   const logout = () => {
-//     setUser(null);
-//     setToken(null);
-//     localStorage.removeItem("user");
-//     localStorage.removeItem("token");
-//     setisLoggedin(false);
-//     navigate("/login");
-//   };

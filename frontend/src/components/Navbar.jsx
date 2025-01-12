@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -43,25 +43,31 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex space-x-8">
-          <Link
+          <NavLink
+            to="/"
+            className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
+          >
+            Home
+          </NavLink>
+          <NavLink
             to="/all-mentors"
             className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
           >
             All mentors
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/contact-us"
             className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
           >
             Contact us
-          </Link>
+          </NavLink>
           { isLoggedin &&
-          <Link
+          <NavLink
             to="/notifications"
             className="text-gray-700 hover:text-teal-600 font-medium transition duration-300"
           >
             Notifications
-          </Link>
+          </NavLink>
           }
         </div>
 
