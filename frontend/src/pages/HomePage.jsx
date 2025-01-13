@@ -85,15 +85,23 @@ const HomePage = () => {
               { step: "Book a meeting", bg: "bg-teal-400" },
               { step: "Booking confirmation", bg: "bg-teal-600" },
             ].map(({ step, bg }, idx) => (
-              <motion.div
-                key={idx}
-                className={`flex items-center justify-center w-24 md:w-28 h-24 md:h-28 rounded-full shadow-md ${bg} mb-4 md:mb-0`}
-                whileHover={{ scale: 1.1 }}
-              >
-                <span className="text-center text-xs md:text-sm font-semibold text-gray-800 leading-snug px-2">
-                  {step}
-                </span>
-              </motion.div>
+              <div key={idx} className="flex items-center">
+                <motion.div
+                  className={`flex items-center justify-center w-24 md:w-28 h-24 md:h-28 rounded-full shadow-md ${bg} mb-4 md:mb-0`}
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <span className="text-center text-xs md:text-sm font-semibold text-gray-800 leading-snug px-2">
+                    {step}
+                  </span>
+                </motion.div>
+
+                {/* Arrows between steps on larger screens only */}
+                {idx < 2 && (
+                  <span className="text-teal-600 text-3xl mx-4 md:inline-block hidden">
+                    &rarr; {/* Use an arrow icon or SVG */}
+                  </span>
+                )}
+              </div>
             ))}
           </div>
         </div>
