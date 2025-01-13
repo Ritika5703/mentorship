@@ -103,7 +103,7 @@ const ProfilePage = () => {
     <div>
       <div className="bg-gray-50 min-h-screen pt-20">
         <div className="container mx-auto py-12 px-6">
-          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="max-w-full mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200">
               <h1 className="text-2xl font-bold">Profile</h1>
               <div className="flex items-center gap-4">
@@ -113,12 +113,12 @@ const ProfilePage = () => {
                 >
                   Edit Profile
                 </button>
-                <button
+                {/* <button
                   onClick={() => navigate("/notifications")}
                   className="text-gray-500"
                 >
                   Notifications
-                </button>
+                </button> */}
                 <button
                   onClick={() => navigate("/settings")}
                   className="text-gray-500"
@@ -128,39 +128,27 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="px-8 py-6 flex gap-8">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-teal-500">
-                {/* Append timestamp to the image URL to force the browser to reload */}
+            <div className="px-8 py-6 flex flex-col md:flex-row gap-8">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-teal-500 mx-auto md:mx-0">
                 <img
                   src={
                     user.profilePicture
                       ? `${user.profilePicture}?${new Date().getTime()}`
                       : "https://via.placeholder.com/150"
-                  } // Add timestamp query param to prevent caching
+                  }
                   alt={`${user.name}'s profile`}
                   className="w-full h-full object-cover"
                 />
               </div>
 
-              <div className="pt-10">
+              <div className="pt-10 text-center md:text-left">
                 <h2 className="text-2xl font-bold">{user.name}</h2>
                 <p className="text-gray-600">{user.email}</p>
-                {/* <p className="text-gray-600">{user.location}</p>
-                <p className="text-gray-600 mt-4">
-                  Years of experience: {user.experience}
-                </p>
-                <p className="text-gray-600">Education: {user.education}</p>
-                <p className="text-gray-600">
-                  MentorConnect meetings attended: {user.meetingsAttended}
-                </p>
-                <p className="text-gray-600">
-                  Rating: {user.rating} ({user.reviews.length} reviews)
-                </p> */}
               </div>
             </div>
 
             <div className="px-8 py-4 border-t border-gray-200">
-              <div className="flex gap-6">
+              <div className="flex flex-col md:flex-row gap-6">
                 {["upcoming", "history", "certificates", "reviews"].map(
                   (tab) => (
                     <button
@@ -204,16 +192,10 @@ const ProfilePage = () => {
                           <strong>Reminder:</strong> {meeting.reminder} hours
                           before
                         </p>
-                        <div className="mt-4 flex gap-4">
+                        <div className="mt-4 flex flex-col sm:flex-row gap-4">
                           <button className="bg-teal-500 text-white px-4 py-2 rounded-lg">
                             Join Meeting
                           </button>
-                          {/* <button
-                            onClick={() => handleCancelMeeting(meeting._id)}
-                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-                          >
-                            Cancel Meeting
-                          </button> */}
                         </div>
                       </div>
                     ))}
@@ -241,6 +223,7 @@ const ProfilePage = () => {
                 ))}
               </div>
             </div>
+
             {user.role !== "mentor" && (
               <div className="px-8 py-6">
                 <button
