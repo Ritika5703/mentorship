@@ -15,46 +15,50 @@ const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
   const openPrivacyModal = (e) => {
     e.preventDefault();
     setIsPrivacyModalOpen(true);
   };
+
   const closePrivacyModal = () => setIsPrivacyModalOpen(false);
 
   const openPaymentModal = (e) => {
     e.preventDefault();
     setIsPaymentModalOpen(true);
   };
+
   const closePaymentModal = () => setIsPaymentModalOpen(false);
 
-  // Function to open the modal
   const openModal = (e) => {
-    e.preventDefault(); // Prevent default link behavior
-    setIsModalOpen(true); // Open the modal
+    e.preventDefault();
+    setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => setIsModalOpen(false);
 
   return (
     <footer className="bg-teal-900 text-white py-8">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Left Section: Logo and Copyright */}
-        <div>
-          <h2 className="text-xl font-bold">Mentor Connect</h2>
-          <p className="mt-2 text-sm">&copy; 2024 MentorConnect</p>
+        <div className="flex flex-col items-center md:items-start">
+          <h2 className="text-xl font-bold text-center md:text-left">
+            Mentor Connect
+          </h2>
+          <p className="mt-2 text-sm text-center md:text-left">
+            &copy; 2024 MentorConnect
+          </p>
         </div>
 
         {/* Center Section: Links */}
-        <div className="flex justify-around">
-          <div className="flex flex-col space-y-2 text-sm">
+        <div className="flex flex-col md:flex-row md:justify-between space-y-4 md:space-y-0">
+          <div className="flex flex-col space-y-2 text-sm items-center md:items-start">
             <Link to="/all-mentors" className="hover:underline">
               All mentors
             </Link>
             {/* <Link to="/become-a-mentor" className="hover:underline">
-              Become a mentor
-            </Link> */}
-
+      Become a mentor
+    </Link> */}
             <Link to="/contact-us" className="hover:underline">
               Contact us
             </Link>
@@ -62,7 +66,7 @@ const Footer = () => {
               Sign in
             </Link>
           </div>
-          <div className="flex flex-col space-y-2 text-sm">
+          <div className="flex flex-col space-y-2 text-sm items-center md:items-start">
             <Link to="#" onClick={openPrivacyModal} className="hover:underline">
               Privacy policy
             </Link>
