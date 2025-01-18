@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
+import MeetingLinkModal from "./MeetingLinkModal";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
   const { isLoggedin, user, login, logout } = useContext(AuthContext);
+  // In your Notifications component, add these state variables:
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -90,6 +94,54 @@ const Notifications = () => {
   const unreadNotifications = notifications.filter((notif) => !notif.read);
   const readNotifications = notifications.filter((notif) => notif.read);
 
+  // Add this function to handle the accept button click
+  const handleAcceptClick = (notificationId, meetingId) => {
+    setSelectedMeeting({ notificationId, meetingId });
+    setIsModalOpen(true);
+  };
+
+  const handleModalSubmit = async (meetingLink) => {
+    try {
+      setLoading(true);
+
+      if (!meetingLink.trim()) {
+        toast.error("Please enter a valid meeting link");
+        return;
+      }
+
+      const { data } = await axios.patch(
+        `http://localhost:4000/api/meetings/${selectedMeeting.meetingId}/accept`,
+        {
+          notificationId: selectedMeeting.notificationId,
+          meetingLink: meetingLink.trim(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.success) {
+        markAsReadInFronted(selectedMeeting.notificationId);
+        toast.success(data.message);
+        setIsModalOpen(false);
+      } else {
+        toast.error(data.message || "Failed to accept meeting");
+      }
+    } catch (error) {
+      console.error("Error accepting meeting:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to accept meeting";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
       {isLoggedin ? (
@@ -152,10 +204,9 @@ const Notifications = () => {
                             <button
                               className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                               onClick={() =>
-                                handleMeetingResponse(
+                                handleAcceptClick(
                                   notification._id,
-                                  notification.meeting._id,
-                                  "accept"
+                                  notification.meeting._id
                                 )
                               }
                             >
@@ -219,6 +270,12 @@ const Notifications = () => {
           </p>
         </div>
       )}
+
+      <MeetingLinkModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };
