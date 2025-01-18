@@ -4,6 +4,7 @@ const notifications = require("../models/notifications");
 const acceptMeeting = async (req, res) => {
   try {
     const { id } = req.params;
+    const { meetingLink, notificationId } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: "Meeting ID is required" });
@@ -23,8 +24,6 @@ const acceptMeeting = async (req, res) => {
       { new: true }
     );
 
-    const { notificationId } = req.body;
-    console.log("Accepting meeting:", { id, notificationId }); // Debug log
     // Mark the notification as read
     await notifications.findByIdAndUpdate(notificationId, { read: true });
 
